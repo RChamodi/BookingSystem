@@ -7,10 +7,28 @@ const Register = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    // Replace with API call
-    console.log("Registering user", data);
-    navigate('/login');
-  };
+  try {
+    const response = await fetch('http://localhost:8080/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      console.log("User registered successfully");
+      navigate('/login'); // redirect to login after success
+    } else {
+      const errorText = await response.text();
+      alert('Registration failed: ' + errorText);
+    }
+  } catch (error) {
+    console.error('Registration error:', error);
+    alert('Something went wrong during registration.');
+  }
+};
+
 
   return (
     <div className="centered-form-container">

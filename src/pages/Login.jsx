@@ -9,16 +9,37 @@ const Login = () => {
 
   const { register, handleSubmit } = useForm();
 
-  const onSubmit = (data) => {
-    // Fake login logic for now (replace with API call)
-    const fakeUser = {
-      email: data.email,
-      role: data.email === 'admin@example.com' ? 'Admin' : 'RegisteredUser',
-      name: 'Demo User',
-    };
-    login(fakeUser);
-    navigate('/');
-  };
+  const onSubmit = async (data) => {
+  const formBody = new URLSearchParams();
+  formBody.append('username', data.email);
+  formBody.append('password', data.password);
+
+  const response = await fetch('http://localhost:8080/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: formBody,
+    credentials: 'include',
+  });
+
+  if (response.ok) {
+    // fetch the logged-in user's info
+    const userRes = await fetch('http://localhost:8080/api/auth/me', {
+      credentials: 'include',
+    });
+    const user = await userRes.json();
+    login(user);
+    if (user.role === 'ADMIN') {
+      navigate('/admin');
+    } else {
+      navigate('/profile');
+    }
+  } else {
+    alert('Login failed');
+  }
+};
+
 
   return (
      <div className="centered-form-container">

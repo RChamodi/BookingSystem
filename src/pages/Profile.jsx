@@ -1,17 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 
-const mockBookings = [
-  { id: 1, service: 'Haircut', date: '2025-06-25', time: '10:00 AM' },
-  { id: 2, service: 'Massage', date: '2025-06-28', time: '1:30 PM' },
-];
-
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const [bookings, setBookings] = useState([]);
   const [profile, setProfile] = useState({
-    name: user.name || '',
-    email: user.email || '',
+    name: '',
+    email: '',
     contact: '',
     preferences: ''
   });
@@ -20,40 +15,110 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState('');
   const [passwordMessage, setPasswordMessage] = useState('');
 
+  // Fetch user profile and bookings
   useEffect(() => {
-    // Replace with API call to get user bookings
-    setBookings(mockBookings);
+    const fetchProfile = async () => {
+      try {
+        const res = await fetch('http://localhost:8080/api/auth/me', {
+          credentials: 'include',
+        });
+        const userData = await res.json();
+        setProfile({
+          name: userData.name || '',
+          email: userData.email || '',
+          contact: userData.contact || '',
+          preferences: userData.preferences || '',
+        });
+      } catch (err) {
+        console.error('Failed to load profile', err);
+      }
+    };
+
+    const fetchBookings = async () => {
+      try {
+        const res = await fetch('http://localhost:8080/api/bookings/my', {
+          credentials: 'include',
+        });
+        const data = await res.json();
+        setBookings(data);
+      } catch (err) {
+        console.error('Failed to load bookings', err);
+      }
+    };
+
+    fetchProfile();
+    fetchBookings();
   }, []);
 
+  // Update profile
   const handleProfileChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
 
-  const handleProfileSubmit = (e) => {
+  const handleProfileSubmit = async (e) => {
     e.preventDefault();
-    // Replace with API call to update profile
-    console.log('Profile updated:', profile);
-  };
+    try {
+      const res = await fetch('http://localhost:8080/api/auth/me', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(profile),
+      });
 
-  const handleCancelBooking = (id) => {
-    // Replace with API call to delete/cancel booking
-    setBookings(bookings.filter(b => b.id !== id));
-  };
-
-  const handlePasswordChange = (e) => {
-    e.preventDefault();
-    // Replace this with secure validation logic
-    const storedPassword = localStorage.getItem('userPassword'); // demo only
-
-    if (currentPassword !== storedPassword) {
-      setPasswordMessage('Current password is incorrect.');
-      return;
+      if (res.ok) {
+        alert('Profile updated');
+      } else {
+        alert('Failed to update profile');
+      }
+    } catch (err) {
+      console.error('Error updating profile', err);
     }
+  };
 
-    localStorage.setItem('userPassword', newPassword); 
-    setPasswordMessage('Password changed successfully!');
-    setCurrentPassword('');
-    setNewPassword('');
+  // Cancel booking
+  const handleCancelBooking = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:8080/api/bookings/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      if (res.ok) {
+        setBookings(bookings.filter((b) => b.id !== id));
+      } else {
+        alert('Failed to cancel booking');
+      }
+    } catch (err) {
+      console.error('Cancel booking error', err);
+    }
+  };
+
+  // Change password
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('http://localhost:8080/api/auth/me/password', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'text/plain',
+        },
+        credentials: 'include',
+        body: newPassword,
+      });
+
+      if (res.ok) {
+        setPasswordMessage('Password changed successfully!');
+      } else {
+        setPasswordMessage('Failed to change password.');
+      }
+      setCurrentPassword('');
+      setNewPassword('');
+    } catch (err) {
+      console.error('Password change error', err);
+      setPasswordMessage('Error changing password');
+    }
   };
 
   return (
@@ -92,13 +157,6 @@ const Profile = () => {
         <form onSubmit={handlePasswordChange}>
           <input
             type="password"
-            placeholder="Current Password"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            required
-          />
-          <input
-            type="password"
             placeholder="New Password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
@@ -116,7 +174,14 @@ const Profile = () => {
           <p>No bookings yet.</p>
         ) : (
           bookings.map((booking) => (
-            <div key={booking.id} style={{ marginBottom: '1rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
+            <div
+              key={booking.id}
+              style={{
+                marginBottom: '1rem',
+                borderBottom: '1px solid #eee',
+                paddingBottom: '1rem',
+              }}
+            >
               <p><strong>Service:</strong> {booking.service}</p>
               <p><strong>Date:</strong> {booking.date}</p>
               <p><strong>Time:</strong> {booking.time}</p>

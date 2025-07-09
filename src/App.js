@@ -41,7 +41,7 @@ const AppWrapper = () => {
         <Route
           path="/profile"
           element={
-            <PrivateRoute roles={['RegisteredUser', 'Admin']}>
+            <PrivateRoute roles={['USER', 'ADMIN']}>
               <Profile />
             </PrivateRoute>
           }
@@ -49,7 +49,7 @@ const AppWrapper = () => {
         <Route
           path="/booking"
           element={
-            <PrivateRoute roles={['RegisteredUser', 'Admin']}>
+            <PrivateRoute roles={['USER', 'ADMIN']}>
               <Booking />
             </PrivateRoute>
           }
@@ -57,7 +57,7 @@ const AppWrapper = () => {
         <Route
           path="/admin"
           element={
-            <PrivateRoute roles={['Admin']}>
+            <PrivateRoute roles={['ADMIN']}>
               <AdminDashboard />
             </PrivateRoute>
           }
