@@ -171,24 +171,30 @@ const Profile = () => {
       <div className="card">
         <h3>Booking History</h3>
         {bookings.length === 0 ? (
-          <p>No bookings yet.</p>
-        ) : (
-          bookings.map((booking) => (
-            <div
-              key={booking.id}
-              style={{
-                marginBottom: '1rem',
-                borderBottom: '1px solid #eee',
-                paddingBottom: '1rem',
-              }}
-            >
-              <p><strong>Service:</strong> {booking.service}</p>
-              <p><strong>Date:</strong> {booking.date}</p>
-              <p><strong>Time:</strong> {booking.time}</p>
-              <button onClick={() => handleCancelBooking(booking.id)}>Cancel Booking</button>
-            </div>
-          ))
-        )}
+  <p>No bookings yet.</p>
+) : (
+  bookings.map((booking) => (
+    <div
+      key={booking.id}
+      style={{
+        marginBottom: '1rem',
+        borderBottom: '1px solid #eee',
+        paddingBottom: '1rem',
+      }}
+    >
+      <p><strong>Service:</strong> {booking.serviceName}</p>
+<p><strong>Date:</strong> {new Date(booking.dateTime).toLocaleDateString()}</p>
+<p><strong>Time:</strong> {new Date(booking.dateTime).toLocaleTimeString()}</p>
+<p><strong>Location:</strong> {booking.location}</p>
+<p><strong>Status:</strong> {booking.cancelled ? 'Cancelled' : 'Active'}</p>
+
+      {!booking.cancelled && (
+        <button onClick={() => handleCancelBooking(booking.id)}>Cancel Booking</button>
+      )}
+    </div>
+  ))
+)}
+
       </div>
     </div>
   );

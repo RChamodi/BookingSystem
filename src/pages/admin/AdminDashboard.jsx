@@ -31,11 +31,11 @@ const AdminDashboard = () => {
       <div style={{ width: '220px', background: '#2c3e50', color: '#fff', padding: '1rem' }}>
         <h3>Admin Panel</h3>
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <button onClick={() => setActiveTab('dashboard')}>📊 Dashboard</button>
-          <button onClick={() => setActiveTab('services')}>🛠 Services</button>
-          <button onClick={() => setActiveTab('availability')}>📅 Availability</button>
-          <button onClick={() => setActiveTab('bookings')}>📥 Bookings</button>
-          <button onClick={() => setActiveTab('users')}>👤 Users</button>
+          <button onClick={() => setActiveTab('dashboard')}> Dashboard</button>
+          <button onClick={() => setActiveTab('services')}> Services</button>
+          <button onClick={() => setActiveTab('availability')}> Availability</button>
+          <button onClick={() => setActiveTab('bookings')}> Bookings</button>
+          <button onClick={() => setActiveTab('users')}> Users</button>
         </nav>
       </div>
 

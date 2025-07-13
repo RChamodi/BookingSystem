@@ -1,14 +1,14 @@
 import React, { createContext, useState, useEffect } from 'react';
 
-// Create Auth Context
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);  // user object with role and info
+  const [user, setUser] = useState(null); 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Optionally check if user token exists in localStorage to persist login
+    
     const savedUser = JSON.parse(localStorage.getItem('user'));
     if (savedUser) {
       setUser(savedUser);

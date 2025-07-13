@@ -18,7 +18,7 @@ const Register = () => {
 
     if (response.ok) {
       console.log("User registered successfully");
-      navigate('/login'); // redirect to login after success
+      navigate('/login'); 
     } else {
       const errorText = await response.text();
       alert('Registration failed: ' + errorText);
