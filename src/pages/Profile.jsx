@@ -7,7 +7,7 @@ const Profile = () => {
   const [profile, setProfile] = useState({
     name: '',
     email: '',
-    contact: '',
+    contactInfo: '',
     preferences: ''
   });
 
@@ -26,7 +26,7 @@ const Profile = () => {
         setProfile({
           name: userData.name || '',
           email: userData.email || '',
-          contact: userData.contact || '',
+          contactInfo: userData.contactInfo || '',
           preferences: userData.preferences || '',
         });
       } catch (err) {
@@ -137,8 +137,8 @@ const Profile = () => {
         />
         <input
           type="text"
-          name="contact"
-          value={profile.contact}
+          name="contactInfo"
+          value={profile.contactInfo}
           onChange={handleProfileChange}
           placeholder="Contact Number"
         />
