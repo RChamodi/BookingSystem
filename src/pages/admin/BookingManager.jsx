@@ -7,6 +7,71 @@ const BookingManager = () => {
   const [editForm, setEditForm] = useState({ date: '', time: '' });
 
   useEffect(() => {
+    //  MOCK DATA
+    const mock = [
+      {
+        id: 1,
+        user: 'Alice Smith',
+        service: 'Haircut',
+        date: '2025-07-26',
+        time: '10:00',
+        status: 'Pending',
+      },
+      {
+        id: 2,
+        user: 'Bob Johnson',
+        service: 'Massage',
+        date: '2025-07-27',
+        time: '14:30',
+        status: 'Confirmed',
+      },
+      {
+        id: 3,
+        user: 'Carla White',
+        service: 'Facial',
+        date: '2025-07-28',
+        time: '12:00',
+        status: 'Cancelled',
+      },
+    ];
+
+    setBookings(mock);
+    }, []);
+
+    const handleStatusChange = (id) => {
+    setBookings(prev =>
+      prev.map(b => b.id === id ? { ...b, status: 'Confirmed' } : b)
+    );
+  };
+   
+  const handleCancel = (id) => {
+    if (window.confirm('Are you sure you want to cancel this booking?')) {
+      setBookings(prev => prev.filter(b => b.id !== id));
+ }
+  };
+const handleModifyClick = (booking) => {
+    setEditingId(booking.id);
+    setEditForm({ date: booking.date, time: booking.time });
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditSubmit = (id) => {
+    const updatedDateTime = `${editForm.date}T${editForm.time}`;
+    setBookings(prev =>
+      prev.map(b =>
+        b.id === id
+          ? { ...b, date: editForm.date, time: editForm.time, status: 'Modified' }
+          : b
+      )
+    );
+    setEditingId(null);
+};
+
+  /*useEffect(() => {
     axios.get('http://localhost:8080/api/admin/bookings', {
       withCredentials: true,
     })
@@ -93,7 +158,7 @@ const BookingManager = () => {
       setEditingId(null);
     })
     .catch(err => console.error(err));
-  };
+  };*/
 
   return (
     <div>

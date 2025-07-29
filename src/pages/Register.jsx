@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit,setValue } = useForm();
   const navigate = useNavigate();
 
+  // Autofill demo values
+  useEffect(() => {
+    setValue('name', 'Demo User');
+    setValue('email', 'demo@gmail.com');
+    setValue('password', 'demo123');
+  }, [setValue]);
+
   const onSubmit = async (data) => {
+    //  Fake registration logic for demo
+    console.log('Mock user registered:', data);
+    alert('Demo registration successful');
+    navigate('/login');
+  };
+
+  /*const onSubmit = async (data) => {
   try {
     const response = await fetch('http://localhost:8080/api/auth/register', {
       method: 'POST',
@@ -27,7 +41,7 @@ const Register = () => {
     console.error('Registration error:', error);
     alert('Something went wrong during registration.');
   }
-};
+};*/
 
 
   return (

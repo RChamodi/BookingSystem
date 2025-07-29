@@ -11,6 +11,73 @@ const Booking = () => {
   });
 
   useEffect(() => {
+    //  Use mock services
+    setServices([
+      {
+        id: 1,
+        name: 'Haircut',
+        type: 'Offline',
+        price: 300,
+        description: 'Basic haircut with styling',
+        location: 'Downtown Salon',
+        availability: true,
+      },
+      {
+        id: 2,
+        name: 'Therapy Session',
+        type: 'Online',
+        price: 1500,
+        description: 'Online counseling session',
+        location: 'Zoom',
+        availability: true,
+      },
+    ]);
+    }, []);
+
+  const fetchSlots = async (serviceId) => {
+    //  Mock slots
+    setAvailableSlots([
+      {
+        id: 101,
+        startTime: new Date().toISOString(),
+        endTime: new Date(Date.now() + 60 * 60 * 1000).toISOString(), // +1 hour
+      },
+      {
+        id: 102,
+        startTime: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), // +2 hours
+        endTime: new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString(), // +3 hours
+      },
+    ]);
+  };
+
+  const handleFilterChange = (e) => {
+    setFilters({ ...filters, [e.target.name]: e.target.value });
+  };
+
+  const handleBookClick = async (service) => {
+    setSelectedService(service);
+    await fetchSlots(service.id);
+    setSelectedSlot(null);
+  };
+
+  const confirmBooking = async () => {
+    if (!selectedSlot) return alert('Please select a time slot.');
+
+    //  Mock booking
+    alert(`Mock booking confirmed: ${selectedService.name} at ${new Date(selectedSlot.startTime).toLocaleString()}`);
+    setSelectedService(null);
+    setAvailableSlots([]);
+    setSelectedSlot(null);};
+
+  const filteredServices = services.filter((s) => {
+    const matchesLocation = filters.location
+      ? s.location?.toLowerCase().includes(filters.location.toLowerCase())
+      : true;
+    const matchesType = filters.type ? s.type === filters.type : true;
+    return matchesLocation && matchesType;
+  });
+
+  /*useEffect(() => {
     fetchServices();
   }, []);
 
@@ -99,7 +166,7 @@ const Booking = () => {
       : true;
     const matchesType = filters.type ? s.type === filters.type : true;
     return matchesLocation && matchesType;
-  });
+  });*/
 
   return (
     <div className="container">

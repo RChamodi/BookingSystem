@@ -7,9 +7,26 @@ const Login = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit,setValue } = useForm();
 
-  const onSubmit = async (data) => {
+  // Autofill demo data
+  React.useEffect(() => {
+    setValue('email', 'demo@gmail.com');
+    setValue('password', 'demo123');
+  }, [setValue]);
+
+  const onSubmit = (data) => {
+    //  Fake login logic for demo
+    const fakeUser = {
+      email: data.email,
+      name: 'Demo User',
+      role: data.email === 'admin@gmail.com' ? 'ADMIN' : 'USER',
+    };
+    login(fakeUser);
+    navigate(fakeUser.role === 'ADMIN' ? '/admin' : '/profile');
+  };
+
+ /* const onSubmit = async (data) => {
   const formBody = new URLSearchParams();
   formBody.append('username', data.email);
   formBody.append('password', data.password);
@@ -38,7 +55,7 @@ const Login = () => {
   } else {
     alert('Login failed');
   }
-};
+};*/
 
 
   return (

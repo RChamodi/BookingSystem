@@ -15,8 +15,60 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState('');
   const [passwordMessage, setPasswordMessage] = useState('');
 
-  // Fetch user profile and bookings
   useEffect(() => {
+  //  Mock profile data
+  setProfile({
+    name: 'Demo User',
+    email: 'demo@gmail.com',
+    contactInfo: '1234567890',
+    preferences: 'Morning slots, prefers yoga',
+  });
+  //  Mock bookings
+  setBookings([
+    {
+      id: 1,
+      serviceName: 'Haircut',
+      dateTime: new Date().toISOString(),
+      location: 'Main Branch',
+      cancelled: false,
+    },
+    {
+      id: 2,
+      serviceName: 'Massage',
+      dateTime: new Date().toISOString(),
+      location: 'Downtown Spa',
+      cancelled: true,
+    },
+  ]);}, []);
+
+//  Mock action
+  const handleProfileSubmit = async (e) => {
+  e.preventDefault();
+  alert('Demo: Profile updated');
+};
+//  Mock action
+  const handleProfileChange = async (e) => {
+  e.preventDefault();
+  alert('Demo: Profile updated');
+};
+
+//  Mock cancel
+const handleCancelBooking = async (id) => {
+  
+  setBookings(bookings.map(b => b.id === id ? { ...b, cancelled: true } : b));
+  alert('Demo: Booking cancelled');
+};
+
+ //  Mock password change
+const handlePasswordChange = async (e) => {
+  e.preventDefault();
+
+ 
+  setPasswordMessage('Demo: Password changed!');
+  setNewPassword('');
+};
+  // Fetch user profile and bookings
+  /*useEffect(() => {
     const fetchProfile = async () => {
       try {
         const res = await fetch('http://localhost:8080/api/auth/me', {
@@ -119,7 +171,7 @@ const Profile = () => {
       console.error('Password change error', err);
       setPasswordMessage('Error changing password');
     }
-  };
+  };*/
 
   return (
     <div className="container">

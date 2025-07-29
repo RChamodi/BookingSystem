@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
 
-const API_BASE = 'http://localhost:8080/api/admin/services';
+//const API_BASE = 'http://localhost:8080/api/admin/services';
 
 const ServiceManager = () => {
   const [services, setServices] = useState([]);
@@ -16,6 +16,83 @@ const ServiceManager = () => {
   const [editId, setEditId] = useState(null);
 
   useEffect(() => {
+    //  Mock data instead of API call
+    setServices([
+      {
+        id: 1,
+        name: 'Haircut',
+        type: 'Offline',
+        price: 300,
+        location: 'Salon A',
+        description: 'Basic haircut service',
+      },
+      {
+        id: 2,
+        name: 'Online Consultation',
+        type: 'Online',
+        price: 500,
+        location: 'Virtual',
+        description: 'Hair consultation over video',
+      },
+    ]);
+
+    
+  }, []);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleAddOrUpdate = async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      ...formData,
+      price: parseFloat(formData.price),
+    };
+
+    if (isEditing) {
+      setServices((prev) =>
+        prev.map((service) =>
+          service.id === editId ? { ...payload, id: editId } : service
+        )
+      );
+    } else {
+      const newId = services.length ? Math.max(...services.map(s => s.id)) + 1 : 1;
+      setServices((prev) => [...prev, { ...payload, id: newId }]);
+    }
+
+    // Reset form
+    setFormData({
+      name: '',
+      type: '',
+      price: '',
+      location: '',
+      description: '',
+    });
+    setIsEditing(false);
+    setEditId(null);
+
+    
+  };
+
+  const handleEdit = (service) => {
+    setFormData({
+      name: service.name || '',
+      type: service.type || '',
+      price: service.price || '',
+      location: service.location || '',
+      description: service.description || '',
+    });
+    setIsEditing(true);
+    setEditId(service.id);
+  };
+  const handleDelete = async (id) => {
+    setServices((prev) => prev.filter((service) => service.id !== id));
+
+  };
+
+  /*useEffect(() => {
     fetchServices();
   }, []);
 
@@ -90,7 +167,7 @@ const ServiceManager = () => {
     } catch (error) {
       console.error('Error deleting service:', error);
     }
-  };
+  };*/
 
   return (
     <div>
