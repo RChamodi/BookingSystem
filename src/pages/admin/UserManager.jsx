@@ -3,39 +3,8 @@ import React, { useState, useEffect } from 'react';
 const UserManager = () => {
   const [users, setUsers] = useState([]);
 
+  
   useEffect(() => {
-    //   mock data for demo
-    setUsers([
-      {
-        id: 1,
-        name: 'Alice Smith',
-        email: 'alice@gmail.com',
-        blocked: false,
-      },
-      {
-        id: 2,
-        name: 'Bob Johnson',
-        email: 'bob@gmail.com',
-        blocked: true,
-      },
-      {
-        id: 3,
-        name: 'Charlie Brown',
-        email: 'charlie@gmail.com',
-        blocked: false,
-      },
-    ]);
-    }, []);
-    const toggleBlockStatus = async (id, currentlyBlocked) => {
-    const action = currentlyBlocked ? 'unblock' : 'block';
-
-    //  Mock toggle logic (no API call)
-    setUsers(users.map(user =>
-      user.id === id ? { ...user, blocked: !user.blocked } : user
-    ));
-     };
-
-  /*useEffect(() => {
     fetchUsers();
   }, []);
 
@@ -70,7 +39,7 @@ const UserManager = () => {
     } catch (error) {
       console.error(`Failed to ${action} user:`, error);
     }
-  };*/
+  };
 
   return (
     <div>

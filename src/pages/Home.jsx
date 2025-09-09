@@ -20,12 +20,12 @@ const Home = () => {
       {user ? (
         <>
           <h2>Hello, {user.name} </h2>
-          {user.role === 'Admin' && (
+          {user.role === 'ADMIN' && (
             <Link to="/admin">
               <button>Go to Admin Dashboard</button>
             </Link>
           )}
-          {user.role === 'RegisteredUser' && (
+          {user.role === 'USER' && (
             <>
               <Link to="/booking">
                 <button>Book a Service</button>

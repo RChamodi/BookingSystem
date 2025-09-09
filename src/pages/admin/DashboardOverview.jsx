@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-//import axios from 'axios';
+import axios from 'axios';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer,
 } from 'recharts';
@@ -15,31 +15,6 @@ const DashboardOverview = () => {
   const [topServices, setTopServices] = useState([]);
 
   useEffect(() => {
-    //  MOCK STATS
-    setStats({
-      total: 120,
-      confirmed: 95,
-      cancelled: 25,
-    });
-
-    //  MOCK BOOKINGS PER DAY
-    setBookingData([
-      { date: '2025-07-21', bookings: 10 },
-      { date: '2025-07-22', bookings: 18 },
-      { date: '2025-07-23', bookings: 15 },
-      { date: '2025-07-24', bookings: 25 },
-      { date: '2025-07-25', bookings: 22 },
-    ]);
-
-    //  MOCK TOP SERVICES
-    setTopServices([
-      { name: 'Haircut', count: 30 },
-      { name: 'Massage', count: 22 },
-      { name: 'Facial', count: 18 },
-    ]);
-    }, []);
-
- /* useEffect(() => {
     
     axios.get('http://localhost:8080/api/admin/dashboard/stats', {
       withCredentials: true,
@@ -78,7 +53,7 @@ const DashboardOverview = () => {
       setTopServices(services);
     })
     .catch(err => console.error('Services error:', err));
-  }, []);*/
+  }, []);
 
   return (
     <div className="container">

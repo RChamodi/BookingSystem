@@ -2,42 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-//import axios from 'axios';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
 
 const localizer = momentLocalizer(moment);
-//const API_BASE = 'http://localhost:8080/api/admin';
-
-// MOCK DATA
-const mockServices = [
-  { id: 1, name: 'Yoga Session' },
-  { id: 2, name: 'Therapy Consultation' },
-];
-
-const mockSlots = {
-  1: [
-    {
-      id: 'slot1',
-      title: 'Available',
-      start: new Date(moment().add(1, 'days').hour(10).minute(0).toDate()),
-      end: new Date(moment().add(1, 'days').hour(11).minute(0).toDate()),
-    },
-    {
-      id: 'slot2',
-      title: 'Available',
-      start: new Date(moment().add(2, 'days').hour(14).minute(0).toDate()),
-      end: new Date(moment().add(2, 'days').hour(15).minute(0).toDate()),
-    },
-  ],
-  2: [
-    {
-      id: 'slot3',
-      title: 'Available',
-      start: new Date(moment().add(1, 'days').hour(9).minute(0).toDate()),
-      end: new Date(moment().add(1, 'days').hour(10).minute(0).toDate()),
-    },
-  ],
-};
-
+const API_BASE = 'http://localhost:8080/api/admin';
 
 const AvailabilityManager = () => {
   const [services, setServices] = useState([]);
@@ -47,80 +17,8 @@ const AvailabilityManager = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentView, setCurrentView] = useState('week');
 
-  useEffect(() => {
-  // Set mock services for demo
-  setServices(mockServices);
-}, []);
 
   useEffect(() => {
-    if (selectedService) {
-      
-      setEvents(mockSlots[selectedService] || []); // using mock
-    }
-  }, [selectedService]);
-
-  const handleSelectSlot = async ({ start, end }) => {
-    if (!selectedService) {
-      alert('Please select a service first.');
-      return;
-    }
-
-    const startStr = moment(start).format('YYYY-MM-DD HH:mm');
-    const endStr = moment(end).format('YYYY-MM-DD HH:mm');
-
-    const newStart = window.prompt('Start time (YYYY-MM-DD HH:mm):', startStr);
-    const newEnd = window.prompt('End time (YYYY-MM-DD HH:mm):', endStr);
-
-    if (!newStart || !newEnd) return;
-
-    const startDate = moment(newStart, 'YYYY-MM-DD HH:mm').toDate();
-    const endDate = moment(newEnd, 'YYYY-MM-DD HH:mm').toDate();
-
-    const newSlot = {
-      id: `mock-${Date.now()}`,
-      title: 'Available',
-      start: startDate,
-      end: endDate,
-    };
-
-    setEvents((prev) => [...prev, newSlot]);
-  };
-
-  const handleEventClick = (event) => {
-    const action = window.prompt('Type "edit" to edit or "delete" to remove this slot:');
-    if (action === 'delete') return handleDeleteSlot(event);
-    if (action === 'edit') return handleEditSlot(event);
-  };
-
-  const handleEditSlot = async (event) => {
-    const newStart = prompt('Enter new start time (YYYY-MM-DD HH:mm):', moment(event.start).format('YYYY-MM-DD HH:mm'));
-    const newEnd = prompt('Enter new end time (YYYY-MM-DD HH:mm):', moment(event.end).format('YYYY-MM-DD HH:mm'));
-
-    if (!newStart || !newEnd) return;
-
-    setEvents((prev) =>
-      prev.map((e) =>
-        e.id === event.id
-          ? {
-              ...e,
-              start: moment(newStart, 'YYYY-MM-DD HH:mm').toDate(),
-              end: moment(newEnd, 'YYYY-MM-DD HH:mm').toDate(),
-            }
-          : e
-      )
-    );
-  };
-
-  const handleDeleteSlot = async (event) => {
-    const confirm = window.confirm('Are you sure you want to delete this slot?');
-    if (!confirm) return;
-
-    setEvents((prev) => prev.filter((e) => e.id !== event.id));
-  };
-
-
-
-  /*useEffect(() => {
     fetchServices();
   }, []);
 
@@ -154,7 +52,7 @@ const AvailabilityManager = () => {
 
   const handleSelectSlot = async ({ start, end }) => {
   if (!selectedService) {
-    alert('Please select a service first.');
+    toast.warning('Please select a service first.');
     return;
   }
 
@@ -167,7 +65,7 @@ const AvailabilityManager = () => {
   const newEnd = window.prompt('End time (YYYY-MM-DD HH:mm):', endStr);
 
   if (!newStart || !newEnd) {
-    alert('Slot creation cancelled.');
+    toast.success('Slot creation cancelled.');
     return;
   }
 
@@ -187,7 +85,7 @@ const AvailabilityManager = () => {
     }]);
   } catch (err) {
     console.error('Failed to create slot', err);
-    alert('Failed to create slot');
+    toast.error('Failed to create slot');
   }
 };
 
@@ -238,7 +136,7 @@ const AvailabilityManager = () => {
     } catch (err) {
       console.error('Error deleting slot', err);
     }
-  };*/
+  };
 
   return (
     <div>

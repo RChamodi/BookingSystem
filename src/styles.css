@@ -157,3 +157,6 @@ button:hover {
   flex: 1 1 150px;
   min-width: 120px;
 }
+.flex > div {
+  padding: 0 1rem;
+}

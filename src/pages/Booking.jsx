@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { toast } from 'react-toastify';
 
 const Booking = () => {
   const [services, setServices] = useState([]);
@@ -10,74 +11,10 @@ const Booking = () => {
     type: '',
   });
 
+  const slotRef = useRef(null);     // For scrolling to slots
+  const topRef = useRef(null);      // For scrolling back to top after booking
+
   useEffect(() => {
-    //  Use mock services
-    setServices([
-      {
-        id: 1,
-        name: 'Haircut',
-        type: 'Offline',
-        price: 300,
-        description: 'Basic haircut with styling',
-        location: 'Downtown Salon',
-        availability: true,
-      },
-      {
-        id: 2,
-        name: 'Therapy Session',
-        type: 'Online',
-        price: 1500,
-        description: 'Online counseling session',
-        location: 'Zoom',
-        availability: true,
-      },
-    ]);
-    }, []);
-
-  const fetchSlots = async (serviceId) => {
-    //  Mock slots
-    setAvailableSlots([
-      {
-        id: 101,
-        startTime: new Date().toISOString(),
-        endTime: new Date(Date.now() + 60 * 60 * 1000).toISOString(), // +1 hour
-      },
-      {
-        id: 102,
-        startTime: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), // +2 hours
-        endTime: new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString(), // +3 hours
-      },
-    ]);
-  };
-
-  const handleFilterChange = (e) => {
-    setFilters({ ...filters, [e.target.name]: e.target.value });
-  };
-
-  const handleBookClick = async (service) => {
-    setSelectedService(service);
-    await fetchSlots(service.id);
-    setSelectedSlot(null);
-  };
-
-  const confirmBooking = async () => {
-    if (!selectedSlot) return alert('Please select a time slot.');
-
-    //  Mock booking
-    alert(`Mock booking confirmed: ${selectedService.name} at ${new Date(selectedSlot.startTime).toLocaleString()}`);
-    setSelectedService(null);
-    setAvailableSlots([]);
-    setSelectedSlot(null);};
-
-  const filteredServices = services.filter((s) => {
-    const matchesLocation = filters.location
-      ? s.location?.toLowerCase().includes(filters.location.toLowerCase())
-      : true;
-    const matchesType = filters.type ? s.type === filters.type : true;
-    return matchesLocation && matchesType;
-  });
-
-  /*useEffect(() => {
     fetchServices();
   }, []);
 
@@ -133,6 +70,13 @@ const Booking = () => {
     setSelectedService(service);
     await fetchSlots(service.id);
     setSelectedSlot(null);
+
+    // Scroll to slots container after render
+    setTimeout(() => {
+      if (slotRef.current) {
+        slotRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   };
 
   const confirmBooking = async () => {
@@ -145,37 +89,46 @@ const Booking = () => {
       });
 
       if (response.ok) {
-        alert(`Successfully booked ${selectedService.name} on ${new Date(selectedSlot.startTime).toLocaleString()}`);
+        toast.success(`Successfully booked ${selectedService.name} on ${new Date(selectedSlot.startTime).toLocaleString()}`);
         setSelectedService(null);
         setAvailableSlots([]);
         setSelectedSlot(null);
+
+        // Scroll back to top (services list)
+        if (topRef.current) {
+          topRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
       } else {
         const errorText = await response.text();
-        alert(`Booking failed: ${errorText}`);
+        toast.error("Booking failed!");
       }
     } catch (err) {
-      alert('Booking failed. Please try again.');
+      toast.error('Booking failed. Please try again.');
       console.error('Booking error:', err);
     }
   };
 
   const filteredServices = services.filter((s) => {
-
     const matchesLocation = filters.location
       ? s.location?.toLowerCase().includes(filters.location.toLowerCase())
       : true;
     const matchesType = filters.type ? s.type === filters.type : true;
     return matchesLocation && matchesType;
-  });*/
+  });
 
   return (
-    <div className="container">
+    <div className="container" ref={topRef}>
       <h2>Book a Service</h2>
 
       {/* Filters */}
       <div className="filter-bar">
-        
-        <input type="text" name="location" value={filters.location} onChange={handleFilterChange} placeholder="Location" />
+        <input
+          type="text"
+          name="location"
+          value={filters.location}
+          onChange={handleFilterChange}
+          placeholder="Location"
+        />
         <select name="type" value={filters.type} onChange={handleFilterChange}>
           <option value="">All Types</option>
           <option value="Online">Online</option>
@@ -206,7 +159,11 @@ const Booking = () => {
 
       {/* Slot Selection */}
       {selectedService && (
-        <div className="card" style={{ marginTop: '2rem', backgroundColor: '#f0f8ff' }}>
+        <div
+          ref={slotRef}
+          className="card"
+          style={{ marginTop: '2rem', backgroundColor: '#f0f8ff' }}
+        >
           <h4>Select a time slot for: {selectedService.name}</h4>
           {availableSlots.length === 0 ? (
             <p>No available slots for this service.</p>
