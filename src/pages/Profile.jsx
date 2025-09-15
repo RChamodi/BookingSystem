@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import { toast } from 'react-toastify';
+import '../css/Profile.css';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
@@ -123,11 +124,12 @@ const Profile = () => {
   };
 
   return (
-    <div className="container">
-      <h2 style={{ textAlign: 'center' }}>My Profile</h2>
+    <div className="profile-container">
+    <div className="profile-content container">
+      <h2 className="page-title">My Profile</h2>
 
-      {/* Profile Management */}
-      <form onSubmit={handleProfileSubmit} className="form-box" style={{ marginBottom: '2rem' }}>
+      {/* Profile Form */}
+      <form onSubmit={handleProfileSubmit} className="form-box">
         <h3>Manage Profile</h3>
         <input
           type="text"
@@ -147,57 +149,49 @@ const Profile = () => {
           name="preferences"
           value={profile.preferences}
           onChange={handleProfileChange}
-          placeholder="Preferences (e.g., preferred stylist, time, etc.)"
+          placeholder="Preferences (e.g., stylist, time, etc.)"
         />
-        <button type="submit">Update Profile</button>
+        <button type="submit" className="btn primary">Update Profile</button>
       </form>
 
-      {/* Change Password Section */}
-      <div className="form-box" style={{ marginBottom: '2rem' }}>
+      {/* Change Password */}
+      <form onSubmit={handlePasswordChange} className="form-box">
         <h3>Change Password</h3>
-        <form onSubmit={handlePasswordChange}>
-          <input
-            type="password"
-            placeholder="New Password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            required
-          />
-          <button type="submit">Change Password</button>
-          {passwordMessage && <p>{passwordMessage}</p>}
-        </form>
-      </div>
+        <input
+          type="password"
+          placeholder="New Password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          required
+        />
+        <button type="submit" className="btn">Change Password</button>
+        {passwordMessage && <p className="status-msg">{passwordMessage}</p>}
+      </form>
 
       {/* Booking History */}
       <div className="card">
         <h3>Booking History</h3>
         {bookings.length === 0 ? (
-  <p>No bookings yet.</p>
-) : (
-  bookings.map((booking) => (
-    <div
-      key={booking.id}
-      style={{
-        marginBottom: '1rem',
-        borderBottom: '1px solid #eee',
-        paddingBottom: '1rem',
-      }}
-    >
-      <p><strong>Service:</strong> {booking.serviceName}</p>
-<p><strong>Date:</strong> {new Date(booking.dateTime).toLocaleDateString()}</p>
-<p><strong>Time:</strong> {new Date(booking.dateTime).toLocaleTimeString()}</p>
-<p><strong>Location:</strong> {booking.location}</p>
-<p><strong>Status:</strong> {booking.cancelled ? 'Cancelled' : 'Active'}</p>
-
-      {!booking.cancelled && (
-        <button onClick={() => handleCancelBooking(booking.id)}>Cancel Booking</button>
-      )}
-    </div>
-  ))
-)}
-
+          <p>No bookings yet.</p>
+        ) : (
+          bookings.map((booking) => (
+            <div key={booking.id} className="booking-item">
+              <p><strong>Service:</strong> {booking.serviceName}</p>
+              <p><strong>Date:</strong> {new Date(booking.dateTime).toLocaleDateString()}</p>
+              <p><strong>Time:</strong> {new Date(booking.dateTime).toLocaleTimeString()}</p>
+              <p><strong>Location:</strong> {booking.location}</p>
+              <p><strong>Status:</strong> {booking.cancelled ? 'Cancelled' : 'Active'}</p>
+              {!booking.cancelled && (
+                <button onClick={() => handleCancelBooking(booking.id)} className="btn cancel">
+                  Cancel Booking
+                </button>
+              )}
+            </div>
+          ))
+        )}
       </div>
     </div>
+  </div>
   );
 };
 

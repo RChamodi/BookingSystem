@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../../css/BookingManager.css';
 
 const BookingManager = () => {
   const [bookings, setBookings] = useState([]);
@@ -96,55 +97,37 @@ const BookingManager = () => {
   };
 
   return (
-    <div>
-      <h3> Manage Bookings</h3>
+   <div className="booking-manager">
+      <h3 className="admin-title">Manage Bookings</h3>
       {bookings.length === 0 ? (
         <p>No bookings to display.</p>
       ) : (
         bookings.map((b) => (
-          <div key={b.id} className="card" style={{ marginBottom: '1rem' }}>
-            <p><strong>User:</strong> {b.user}</p>
-            <p><strong>Service:</strong> {b.service}</p>
-            <p><strong>Date:</strong> {b.date}</p>
-            <p><strong>Time:</strong> {b.time}</p>
-            <p><strong>Status:</strong> {b.status}</p>
+          <div key={b.id} className="booking-card">
+            <div className="booking-info">
+              <p><strong>User:</strong> {b.user}</p>
+              <p><strong>Service:</strong> {b.service}</p>
+              <p><strong>Date:</strong> {b.date}</p>
+              <p><strong>Time:</strong> {b.time}</p>
+              <p><strong>Status:</strong> <span className={`status ${b.status.toLowerCase()}`}>{b.status}</span></p>
+            </div>
 
             {editingId === b.id ? (
-              <>
-                <input
-                  type="date"
-                  name="date"
-                  value={editForm.date}
-                  onChange={handleEditChange}
-                />
-                <input
-                  type="time"
-                  name="time"
-                  value={editForm.time}
-                  onChange={handleEditChange}
-                />
-                <button onClick={() => handleEditSubmit(b.id)}> Save</button>
-                <button onClick={() => setEditingId(null)}>Cancel</button>
-              </>
+              <div className="edit-form">
+                <input type="date" name="date" value={editForm.date} onChange={handleEditChange} />
+                <input type="time" name="time" value={editForm.time} onChange={handleEditChange} />
+                <div className="action-buttons">
+                  <button className="btn primary" onClick={() => handleEditSubmit(b.id)}>Save</button>
+                  <button className="btn" onClick={() => setEditingId(null)}>Cancel</button>
+                </div>
+              </div>
             ) : (
-              <div style={{ marginTop: '0.5rem' }}>
+              <div className="action-buttons">
                 {b.status !== 'Confirmed' && (
-                  <button onClick={() => handleStatusChange(b.id)}>
-                     Approve
-                  </button>
+                  <button className="btn primary" onClick={() => handleStatusChange(b.id)}>Approve</button>
                 )}
-                <button
-                  onClick={() => handleModifyClick(b)}
-                  style={{ marginLeft: '0.5rem' }}
-                >
-                   Modify
-                </button>
-                <button
-                  onClick={() => handleCancel(b.id)}
-                  style={{ marginLeft: '0.5rem', backgroundColor: '#ff4d4f' }}
-                >
-                   Cancel
-                </button>
+                <button className="btn" onClick={() => handleModifyClick(b)}>Modify</button>
+                <button className="btn danger" onClick={() => handleCancel(b.id)}>Cancel</button>
               </div>
             )}
           </div>

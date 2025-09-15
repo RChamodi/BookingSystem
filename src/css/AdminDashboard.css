@@ -1,0 +1,114 @@
+.admin-dashboard {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #ecf0f1;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.admin-sidebar {
+  width: 240px;
+  background-color: #2c3e50;
+  color: white;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  color: #ecf0f1;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.nav-button:hover {
+  background-color: #34495e;
+}
+
+.nav-button.active {
+  background-color: #0077cc;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  background-image: url('/public/images/Booking_Admin.jpg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  min-height: 100%;
+}
+
+
+.admin-content > * {
+  position: relative;
+  z-index: 2;
+}
+
+
+.admin-title {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f0d78; 
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+.admin-section {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 1rem;
+    justify-content: space-around;
+  }
+
+  .sidebar-title {
+    display: none;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .nav-button {
+    flex: 1;
+    text-align: center;
+  }
+}

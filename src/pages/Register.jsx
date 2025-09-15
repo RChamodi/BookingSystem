@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import '../css/Register.css';
 
 const Register = () => {
   const { register, handleSubmit } = useForm();
@@ -32,13 +33,13 @@ const Register = () => {
 
 
   return (
-    <div className="centered-form-container">
-      <form className="form-box" onSubmit={handleSubmit(onSubmit)}>
-        <h2 style={{ textAlign: 'center' }}>Register</h2>
+    <div className="register-container">
+      <form className="register-form" onSubmit={handleSubmit(onSubmit)}>
+        <h2 className="register-title">Register</h2>
         <input {...register('name')} placeholder="Name" required />
         <input {...register('email')} placeholder="Email" type="email" required />
         <input {...register('password')} placeholder="Password" type="password" required />
-        <button type="submit">Register</button>
+        <button type="submit" className="btn primary">Register</button>
       </form>
     </div>
   );

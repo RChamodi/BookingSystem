@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import '../css/Login.css';
 
 const Login = () => {
   const { login } = useContext(AuthContext);
@@ -43,14 +44,13 @@ const Login = () => {
 
 
   return (
-     <div className="centered-form-container">
-    
-    <form className="form-box" onSubmit={handleSubmit(onSubmit)}>
-      <h2 style={{ textAlign: 'center' }}>Login</h2>
-      <input {...register('email')} placeholder="Email" type="email" required />
-      <input {...register('password')} placeholder="Password" type="password" required />
-      <button type="submit">Login</button>
-    </form>
+     <div className="login-container">
+      <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
+        <h2 className="login-title">Login</h2>
+        <input {...register('email')} placeholder="Email" type="email" required />
+        <input {...register('password')} placeholder="Password" type="password" required />
+        <button type="submit" className="btn primary">Login</button>
+      </form>
     </div>
   );
 };

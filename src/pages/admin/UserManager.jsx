@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../../css/UserManager.css';
 
 const UserManager = () => {
   const [users, setUsers] = useState([]);
@@ -42,33 +43,26 @@ const UserManager = () => {
   };
 
   return (
-    <div>
-      <h3> Manage Users</h3>
+    <div className="user-manager">
+      <h3 className="admin-title">Manage Users</h3>
       {users.length === 0 ? (
         <p>No users found.</p>
       ) : (
         users.map(user => (
-          <div key={user.id} className="card" style={{ marginBottom: '1rem', padding: '1rem', border: '1px solid #ccc' }}>
-            <p><strong>Name:</strong> {user.name}</p>
-            <p><strong>Email:</strong> {user.email}</p>
-            <p>
-              <strong>Status:</strong>{' '}
-              {user.blocked ? (
-                <span style={{ color: 'red' }}>Blocked</span>
-              ) : (
-                <span style={{ color: 'green' }}>Active</span>
-              )}
-            </p>
+          <div key={user.id} className="user-card">
+            <div className="user-info">
+              <p><strong>Name:</strong> {user.name}</p>
+              <p><strong>Email:</strong> {user.email}</p>
+              <p>
+                <strong>Status:</strong>{' '}
+                <span className={`status-badge ${user.blocked ? 'blocked' : 'active'}`}>
+                  {user.blocked ? 'Blocked' : 'Active'}
+                </span>
+              </p>
+            </div>
             <button
+              className={`btn ${user.blocked ? 'btn-unblock' : 'btn-block'}`}
               onClick={() => toggleBlockStatus(user.id, user.blocked)}
-              style={{
-                backgroundColor: user.blocked ? '#28a745' : '#dc3545',
-                color: '#fff',
-                marginTop: '0.5rem',
-                padding: '0.5rem 1rem',
-                border: 'none',
-                cursor: 'pointer',
-              }}
             >
               {user.blocked ? 'Unblock' : 'Block'}
             </button>

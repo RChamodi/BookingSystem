@@ -1,0 +1,62 @@
+.page-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #ffffff;
+}
+
+.status-msg {
+  margin-top: 0.5rem;
+  color: green;
+  font-size: 0.95rem;
+}
+
+.booking-item {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.booking-item:last-child {
+  border-bottom: none;
+}
+
+.btn.cancel {
+  background-color: #dc3545;
+}
+
+.btn.cancel:hover {
+  background-color: #b52b3c;
+}
+
+.profile-container {
+  min-height: 100vh;
+  background-image: url('/public/images/Booking_Profile.jpg'); 
+  background-size: 110%; 
+  background-position: center;
+  background-repeat: repeat;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4rem 2rem;
+  position: relative;
+}
+
+.profile-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45); 
+  z-index: 1;
+}
+
+.profile-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 800px;
+}
+
+.form-box,
+.card {
+  background-color: rgba(255, 255, 255, 0.96); 
+}

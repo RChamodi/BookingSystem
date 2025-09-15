@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
+import "../css/Booking.css";
 
 const Booking = () => {
   const [services, setServices] = useState([]);
@@ -117,8 +118,9 @@ const Booking = () => {
   });
 
   return (
-    <div className="container" ref={topRef}>
-      <h2>Book a Service</h2>
+    <div className="booking-container">
+    <div className="booking-content container">
+      <h2 className="page-title">Book a Service</h2>
 
       {/* Filters */}
       <div className="filter-bar">
@@ -141,29 +143,29 @@ const Booking = () => {
         <p>No matching services found.</p>
       ) : (
         filteredServices.map((service) => (
-          <div key={service.id} className="card">
-            <h3>{service.name}</h3>
+          <div key={service.id} className="card service-card">
+            <h3 className="service-title">{service.name}</h3>
+
             <p><strong>Type:</strong> {service.type}</p>
-            <p><strong>Price:</strong> Rs {service.price}</p>
-            <p><strong>Description:</strong> {service.description}</p>
+            <p><strong>Price:</strong> Rs{service.price}</p>
             <p><strong>Location:</strong> {service.location}</p>
+            <p><strong>Description:</strong> {service.description}</p>
+
             <button
               onClick={() => handleBookClick(service)}
               disabled={service.availability === false}
+              className="btn"
             >
               {service.availability === false ? 'Unavailable' : 'Book Now'}
             </button>
+
           </div>
         ))
       )}
 
       {/* Slot Selection */}
       {selectedService && (
-        <div
-          ref={slotRef}
-          className="card"
-          style={{ marginTop: '2rem', backgroundColor: '#f0f8ff' }}
-        >
+        <div className="card slot-selection-card" ref={slotRef}>
           <h4>Select a time slot for: {selectedService.name}</h4>
           {availableSlots.length === 0 ? (
             <p>No available slots for this service.</p>
@@ -185,12 +187,18 @@ const Booking = () => {
               ))}
             </ul>
           )}
-          <button onClick={confirmBooking} disabled={!selectedSlot}>Confirm Booking</button>
-          <button onClick={() => setSelectedService(null)} style={{ marginLeft: '1rem' }}>Cancel</button>
+          <div style={{ marginTop: '1rem' }}>
+            <button onClick={confirmBooking} disabled={!selectedSlot} className="btn primary">Confirm Booking</button>
+            <button onClick={() => setSelectedService(null)} className="btn cancel" style={{ marginLeft: '1rem' }}>
+              Cancel
+            </button>
+          </div>
         </div>
       )}
-    </div>
-  );
+
+          </div>
+        </div>
+        );
 };
 
 export default Booking;

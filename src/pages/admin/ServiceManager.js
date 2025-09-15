@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../../css/ServiceManager.css';
 
 const API_BASE = 'http://localhost:8080/api/admin/services';
 
@@ -93,65 +94,43 @@ const ServiceManager = () => {
   };
 
   return (
-    <div>
-      <h3>Manage Services</h3>
+    <div className="service-manager">
+      <h3 className="admin-title">Manage Services</h3>
 
-      <form onSubmit={handleAddOrUpdate} style={{ maxWidth: '400px', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-        <input
-          name="name"
-          placeholder="Service Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="location"
-          placeholder="Location"
-          value={formData.location}
-          onChange={handleChange}
-          required
-        />
+      
+
+      <form onSubmit={handleAddOrUpdate} className="service-form">
+        <input name="name" placeholder="Service Name" value={formData.name} onChange={handleChange} required />
+        <input name="location" placeholder="Location" value={formData.location} onChange={handleChange} required />
         <select name="type" value={formData.type} onChange={handleChange} required>
           <option value="">Select Type</option>
           <option value="Online">Online</option>
           <option value="Offline">Offline</option>
         </select>
-        <input
-          name="price"
-          placeholder="Price"
-          type="number"
-          value={formData.price}
-          onChange={handleChange}
-          required
-        />
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={formData.description}
-          onChange={handleChange}
-          required
-          rows={3}
-        />
-        <button type="submit">
+        <input name="price" placeholder="Price" type="number" value={formData.price} onChange={handleChange} required />
+        <textarea name="description" placeholder="Description" value={formData.description} onChange={handleChange} required rows={3} />
+        <button type="submit" className="btn btn-primary">
           {isEditing ? 'Update Service' : 'Add Service'}
         </button>
       </form>
 
-      <div style={{ marginTop: '2rem' }}>
+      <div className="service-list">
         <h4>Service List</h4>
         {services.length === 0 ? (
           <p>No services found.</p>
         ) : (
           services.map((s) => (
-            <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', margin: '0.5rem 0', borderBottom: '1px solid #ccc', paddingBottom: '0.5rem' }}>
-              <div>
-                <strong>{s.name}</strong> - {s.type} - Rs {s.price}<br />
-                <em>{s.location}</em><br />
+            <div key={s.id} className="service-card">
+              <div className="service-info">
+                <strong>{s.name}</strong> - {s.type} - ₹{s.price}
+                <br />
+                <em>{s.location}</em>
+                <br />
                 <small>{s.description}</small>
               </div>
-              <div>
-                <button onClick={() => handleEdit(s)} style={{ marginRight: '1rem' }}>Edit</button>
-                <button onClick={() => handleDelete(s.id)} style={{ backgroundColor: '#e74c3c', color: 'white' }}>Delete</button>
+              <div className="service-actions">
+                <button onClick={() => handleEdit(s)} className="btn btn-secondary">Edit</button>
+                <button onClick={() => handleDelete(s.id)} className="btn btn-danger">Delete</button>
               </div>
             </div>
           ))

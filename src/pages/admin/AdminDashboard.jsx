@@ -4,6 +4,7 @@ import BookingManager from './BookingManager';
 import UserManager from './UserManager';
 import AvailabilityManager from './AvailabilityManager';
 import DashboardOverview from './DashboardOverview';
+import "../../css/AdminDashboard.css";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -26,24 +27,26 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div style={{ display: 'flex', height: '150vh' }}>
-      {/* Sidebar */}
-      <div style={{ width: '220px', background: '#2c3e50', color: '#fff', padding: '1rem' }}>
-        <h3>Admin Panel</h3>
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <button onClick={() => setActiveTab('dashboard')}> Dashboard</button>
-          <button onClick={() => setActiveTab('services')}> Services</button>
-          <button onClick={() => setActiveTab('availability')}> Availability</button>
-          <button onClick={() => setActiveTab('bookings')}> Bookings</button>
-          <button onClick={() => setActiveTab('users')}> Users</button>
+    <div className="admin-dashboard">
+      <aside className="admin-sidebar">
+        <h3 className="sidebar-title">Admin Panel</h3>
+        <nav className="sidebar-nav">
+          {['dashboard', 'services', 'availability', 'bookings', 'users'].map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={activeTab === tab ? 'nav-button active' : 'nav-button'}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
         </nav>
-      </div>
+      </aside>
 
-      {/* Main Content */}
-      <div style={{ flex: 1, padding: '2rem', background: '#ecf0f1' }}>
-        <h2>{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h2>
-        <div style={{ marginTop: '1rem' }}>{renderContent()}</div>
-      </div>
+      <main className="admin-content">
+        <h2 className="admin-title">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h2>
+        <div className="admin-section">{renderContent()}</div>
+      </main>
     </div>
   );
 };

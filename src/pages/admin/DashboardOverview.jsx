@@ -3,6 +3,7 @@ import axios from 'axios';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer,
 } from 'recharts';
+import '../../css/DashboardOverview.css';
 
 const DashboardOverview = () => {
   const [stats, setStats] = useState({
@@ -56,47 +57,46 @@ const DashboardOverview = () => {
   }, []);
 
   return (
-    <div className="container">
-      <h3> Booking Statistics</h3>
+    <div className="dashboard-page-bg">
+      <div className="dashboard-container">
+        <h3 className="admin-title">Booking Statistics</h3>
 
-      {/* Metrics */}
-      <div style={{ display: 'flex', gap: '2rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
-        <div className="card">
-          <h4>Total Bookings</h4>
-          <p>{stats.total}</p>
+        <div className="stats-grid">
+          <div className="card">
+            <h4>Total Bookings</h4>
+            <p>{stats.total}</p>
+          </div>
+          <div className="card">
+            <h4>Confirmed</h4>
+            <p>{stats.confirmed}</p>
+          </div>
+          <div className="card">
+            <h4>Cancelled</h4>
+            <p>{stats.cancelled}</p>
+          </div>
         </div>
-        <div className="card">
-          <h4>Confirmed</h4>
-          <p>{stats.confirmed}</p>
-        </div>
-        <div className="card">
-          <h4>Cancelled</h4>
-          <p>{stats.cancelled}</p>
-        </div>
-      </div>
 
-      {/* Top Services */}
-      <div className="card" style={{ marginBottom: '2rem' }}>
-        <h4> Most Booked Services</h4>
-        <ul>
-          {topServices.map((s, i) => (
-            <li key={i}>{s.name} - {s.count} bookings</li>
-          ))}
-        </ul>
-      </div>
+        <div className="card" style={{ marginBottom: '2rem' }}>
+          <h4>Most Booked Services</h4>
+          <ul>
+            {topServices.map((s, i) => (
+              <li key={i}>{s.name} - {s.count} bookings</li>
+            ))}
+          </ul>
+        </div>
 
-      {/* Booking Trends Chart */}
-      <div className="card">
-        <h4> Bookings Over Time</h4>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={bookingData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis allowDecimals={false} />
-            <Tooltip />
-            <Bar dataKey="bookings" fill="#0077cc" />
-          </BarChart>
-        </ResponsiveContainer>
+        <div className="card">
+          <h4>Bookings Over Time</h4>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={bookingData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis allowDecimals={false} />
+              <Tooltip />
+              <Bar dataKey="bookings" fill="#0077cc" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
