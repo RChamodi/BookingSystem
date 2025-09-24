@@ -1,204 +1,163 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import "../css/Booking.css";
+import { useNavigate } from 'react-router-dom';
+import '../css/Booking.css';
 
 const Booking = () => {
   const [services, setServices] = useState([]);
-  const [selectedService, setSelectedService] = useState(null);
-  const [availableSlots, setAvailableSlots] = useState([]);
-  const [selectedSlot, setSelectedSlot] = useState(null);
   const [filters, setFilters] = useState({
     location: '',
     type: '',
+    date: '',
+    time: '',
   });
 
-  const slotRef = useRef(null);     // For scrolling to slots
-  const topRef = useRef(null);      // For scrolling back to top after booking
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchServices();
+    const fetchServicesAndSlots = async () => {
+      try {
+        const serviceRes = await fetch('http://localhost:8080/api/services', {
+          credentials: 'include',
+        });
+        const serviceData = await serviceRes.json();
+
+        const servicesWithSlots = await Promise.all(
+          serviceData.map(async (service) => {
+            const slotRes = await fetch(
+              `http://localhost:8080/api/user/slots/available/${service.id}`,
+              { credentials: 'include' }
+            );
+            const slots = await slotRes.json();
+            return { ...service, slots };
+          })
+        );
+
+        setServices(servicesWithSlots);
+      } catch (error) {
+        console.error('Failed to fetch services or slots:', error);
+        toast.error('Failed to load services.');
+      }
+    };
+
+    fetchServicesAndSlots();
   }, []);
-
-  const fetchServices = async () => {
-    try {
-      const response = await fetch('http://localhost:8080/api/services', {
-        credentials: 'include',
-      });
-      const data = await response.json();
-      setServices(data);
-    } catch (error) {
-      console.error('Failed to fetch services:', error);
-    }
-  };
-
-  const fetchSlots = async (serviceId) => {
-    try {
-      const response = await fetch(`http://localhost:8080/api/user/slots/available/${serviceId}`, {
-        credentials: 'include',
-      });
-
-      const contentType = response.headers.get('content-type');
-      if (!response.ok) {
-        const text = await response.text();
-        console.error('Server error:', text);
-        return;
-      }
-
-      if (!contentType || !contentType.includes('application/json')) {
-        const text = await response.text();
-        console.error('Invalid response (not JSON):', text);
-        return;
-      }
-
-      const data = await response.json();
-      if (Array.isArray(data)) {
-        setAvailableSlots(data);
-      } else {
-        console.error('Expected an array of slots, got:', data);
-        setAvailableSlots([]);
-      }
-    } catch (err) {
-      console.error('Fetch failed:', err);
-      setAvailableSlots([]);
-    }
-  };
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
-  const handleBookClick = async (service) => {
-    setSelectedService(service);
-    await fetchSlots(service.id);
-    setSelectedSlot(null);
+  const handleClearFilters = () => {
+  setFilters({
+    location: '',
+    type: '',
+    date: '',
+    time: '',
+  });
+};
 
-    // Scroll to slots container after render
-    setTimeout(() => {
-      if (slotRef.current) {
-        slotRef.current.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 100);
+
+  const handleBookNow = (serviceId) => {
+    navigate(`/booking/${serviceId}`);
   };
 
-  const confirmBooking = async () => {
-    if (!selectedSlot) return alert('Please select a time slot.');
-
-    try {
-      const response = await fetch(`http://localhost:8080/api/user/slots/book/${selectedSlot.id}`, {
-        method: 'POST',
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        toast.success(`Successfully booked ${selectedService.name} on ${new Date(selectedSlot.startTime).toLocaleString()}`);
-        setSelectedService(null);
-        setAvailableSlots([]);
-        setSelectedSlot(null);
-
-        // Scroll back to top (services list)
-        if (topRef.current) {
-          topRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-      } else {
-        const errorText = await response.text();
-        toast.error("Booking failed!");
-      }
-    } catch (err) {
-      toast.error('Booking failed. Please try again.');
-      console.error('Booking error:', err);
-    }
-  };
-
-  const filteredServices = services.filter((s) => {
+  const filteredServices = services.filter((service) => {
     const matchesLocation = filters.location
-      ? s.location?.toLowerCase().includes(filters.location.toLowerCase())
+      ? service.location?.toLowerCase().includes(filters.location.toLowerCase())
       : true;
-    const matchesType = filters.type ? s.type === filters.type : true;
-    return matchesLocation && matchesType;
+
+    const matchesType = filters.type ? service.type === filters.type : true;
+
+    const matchesDate = filters.date
+      ? service.slots?.some((slot) =>
+          new Date(slot.startTime).toISOString().startsWith(filters.date)
+        )
+      : true;
+
+    const matchesTime = filters.time
+      ? service.slots?.some((slot) => {
+          const slotTime = new Date(slot.startTime).toTimeString().slice(0, 5);
+          return slotTime === filters.time;
+        })
+      : true;
+
+    return matchesLocation && matchesType && matchesDate && matchesTime;
   });
 
   return (
     <div className="booking-container">
-    <div className="booking-content container">
-      <h2 className="page-title">Book a Service</h2>
+      <div className="booking-content ">
+        <h2 className="page-title">Book a Service</h2>
 
-      {/* Filters */}
-      <div className="filter-bar">
-        <input
-          type="text"
-          name="location"
-          value={filters.location}
-          onChange={handleFilterChange}
-          placeholder="Location"
-        />
-        <select name="type" value={filters.type} onChange={handleFilterChange}>
-          <option value="">All Types</option>
-          <option value="Online">Online</option>
-          <option value="Offline">Offline</option>
-        </select>
+        {/* Filters */}
+        <div className="filter-bar">
+          <input
+            type="text"
+            name="location"
+            value={filters.location}
+            onChange={handleFilterChange}
+            placeholder="Location"
+          />
+          <select name="type" value={filters.type} onChange={handleFilterChange}>
+            <option value="">All Types</option>
+            <option value="Online">Online</option>
+            <option value="Offline">Offline</option>
+          </select>
+          <input
+            type="date"
+            name="date"
+            value={filters.date}
+            onChange={handleFilterChange}
+          />
+          <input
+            type="time"
+            name="time"
+            value={filters.time}
+            onChange={handleFilterChange}
+          />
+          <button onClick={handleClearFilters} className="btn clear-btn">
+    Clear Filters
+  </button>
+        </div>
+
+        {/* Services */}
+        <div className="services-grid">
+        {filteredServices.length === 0 ? (
+          <p>No matching services found.</p>
+        ) : (
+          filteredServices.map((service) => (
+            <div key={service.id} className="card service-card youtube-style-card">
+  {/* Image at the top */}
+  <div className="booking-img-wrapper">
+    <div className="booking-img-placeholder">
+      <span className="service-name">{service.name}</span>
+    </div>
+  </div>
+
+  {/* Details */}
+  <div className="service-details">
+    <h3 className="service-title">{service.name}</h3>
+    <p className="service-description">{service.description}</p>
+
+    <div className="card-footer">
+      <div className="price">Rs{service.price}</div>
+      <button
+        onClick={() => handleBookNow(service.id)}
+        disabled={service.availability === false}
+        className="btn book-btn"
+      >
+        {service.availability === false ? 'Unavailable' : 'Book Now'}
+      </button>
+    </div>
+  </div>
+</div>
+
+          ))
+        )}
+        </div>
       </div>
-
-      {/* Services */}
-      {filteredServices.length === 0 ? (
-        <p>No matching services found.</p>
-      ) : (
-        filteredServices.map((service) => (
-          <div key={service.id} className="card service-card">
-            <h3 className="service-title">{service.name}</h3>
-
-            <p><strong>Type:</strong> {service.type}</p>
-            <p><strong>Price:</strong> Rs{service.price}</p>
-            <p><strong>Location:</strong> {service.location}</p>
-            <p><strong>Description:</strong> {service.description}</p>
-
-            <button
-              onClick={() => handleBookClick(service)}
-              disabled={service.availability === false}
-              className="btn"
-            >
-              {service.availability === false ? 'Unavailable' : 'Book Now'}
-            </button>
-
-          </div>
-        ))
-      )}
-
-      {/* Slot Selection */}
-      {selectedService && (
-        <div className="card slot-selection-card" ref={slotRef}>
-          <h4>Select a time slot for: {selectedService.name}</h4>
-          {availableSlots.length === 0 ? (
-            <p>No available slots for this service.</p>
-          ) : (
-            <ul>
-              {availableSlots.map((slot) => (
-                <li key={slot.id} style={{ marginBottom: '0.5rem' }}>
-                  <label>
-                    <input
-                      type="radio"
-                      name="slot"
-                      value={slot.id}
-                      onChange={() => setSelectedSlot(slot)}
-                    />
-                    {' '}
-                    {new Date(slot.startTime).toLocaleString()} - {new Date(slot.endTime).toLocaleTimeString()}
-                  </label>
-                </li>
-              ))}
-            </ul>
-          )}
-          <div style={{ marginTop: '1rem' }}>
-            <button onClick={confirmBooking} disabled={!selectedSlot} className="btn primary">Confirm Booking</button>
-            <button onClick={() => setSelectedService(null)} className="btn cancel" style={{ marginLeft: '1rem' }}>
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-
-          </div>
-        </div>
-        );
+    </div>
+  );
 };
 
 export default Booking;

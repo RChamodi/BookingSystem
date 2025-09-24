@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import '../common/NavBar.css'; 
+import UserDropdown from '../UserDropdown';
 
 const NavBar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -15,7 +16,7 @@ const NavBar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <Link to="/" className="nav-logo">BookingApp</Link>
+        <Link to="/" className="nav-logo">BookingPro</Link>
       </div>
 
       <div className="navbar-right">
@@ -28,8 +29,8 @@ const NavBar = () => {
           </>
         ) : (
           <>
-            <Link to="/profile" className="nav-link">Profile</Link>
-            <button onClick={handleLogout} className="nav-button">Logout</button>
+            
+            <UserDropdown />
           </>
         )}
       </div>

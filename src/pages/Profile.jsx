@@ -5,7 +5,7 @@ import '../css/Profile.css';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
-  const [bookings, setBookings] = useState([]);
+
   const [profile, setProfile] = useState({
     name: '',
     email: '',
@@ -17,7 +17,7 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState('');
   const [passwordMessage, setPasswordMessage] = useState('');
 
-  // Fetch user profile and bookings
+  // Fetch user profile
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -36,20 +36,7 @@ const Profile = () => {
       }
     };
 
-    const fetchBookings = async () => {
-      try {
-        const res = await fetch('http://localhost:8080/api/bookings/my', {
-          credentials: 'include',
-        });
-        const data = await res.json();
-        setBookings(data);
-      } catch (err) {
-        console.error('Failed to load bookings', err);
-      }
-    };
-
     fetchProfile();
-    fetchBookings();
   }, []);
 
   // Update profile
@@ -76,24 +63,6 @@ const Profile = () => {
       }
     } catch (err) {
       console.error('Error updating profile', err);
-    }
-  };
-
-  // Cancel booking
-  const handleCancelBooking = async (id) => {
-    try {
-      const res = await fetch(`http://localhost:8080/api/bookings/${id}`, {
-        method: 'DELETE',
-        credentials: 'include',
-      });
-
-      if (res.ok) {
-        setBookings(bookings.filter((b) => b.id !== id));
-      } else {
-        toast.error('Failed to cancel booking');
-      }
-    } catch (err) {
-      console.error('Cancel booking error', err);
     }
   };
 
@@ -125,73 +94,52 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-    <div className="profile-content container">
-      <h2 className="page-title">My Profile</h2>
+      <div className="profile-content container">
+        <h2 className="page-title">My Profile</h2>
 
-      {/* Profile Form */}
-      <form onSubmit={handleProfileSubmit} className="form-box">
-        <h3>Manage Profile</h3>
-        <input
-          type="text"
-          name="name"
-          value={profile.name}
-          onChange={handleProfileChange}
-          placeholder="Full Name"
-        />
-        <input
-          type="text"
-          name="contactInfo"
-          value={profile.contactInfo}
-          onChange={handleProfileChange}
-          placeholder="Contact Number"
-        />
-        <textarea
-          name="preferences"
-          value={profile.preferences}
-          onChange={handleProfileChange}
-          placeholder="Preferences (e.g., stylist, time, etc.)"
-        />
-        <button type="submit" className="btn primary">Update Profile</button>
-      </form>
+        {/* Profile Form */}
+        <form onSubmit={handleProfileSubmit} className="form-box">
+          <h3>Manage Profile</h3>
+          <input
+            type="text"
+            name="name"
+            value={profile.name}
+            onChange={handleProfileChange}
+            placeholder="Full Name"
+          />
+          <input
+            type="text"
+            name="contactInfo"
+            value={profile.contactInfo}
+            onChange={handleProfileChange}
+            placeholder="Contact Number"
+          />
+          <textarea
+            name="preferences"
+            value={profile.preferences}
+            onChange={handleProfileChange}
+            placeholder="Preferences (e.g., stylist, time, etc.)"
+          />
+          <button type="submit" className="btn primary">
+            Update Profile
+          </button>
+        </form>
 
-      {/* Change Password */}
-      <form onSubmit={handlePasswordChange} className="form-box">
-        <h3>Change Password</h3>
-        <input
-          type="password"
-          placeholder="New Password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          required
-        />
-        <button type="submit" className="btn">Change Password</button>
-        {passwordMessage && <p className="status-msg">{passwordMessage}</p>}
-      </form>
-
-      {/* Booking History */}
-      <div className="card">
-        <h3>Booking History</h3>
-        {bookings.length === 0 ? (
-          <p>No bookings yet.</p>
-        ) : (
-          bookings.map((booking) => (
-            <div key={booking.id} className="booking-item">
-              <p><strong>Service:</strong> {booking.serviceName}</p>
-              <p><strong>Date:</strong> {new Date(booking.dateTime).toLocaleDateString()}</p>
-              <p><strong>Time:</strong> {new Date(booking.dateTime).toLocaleTimeString()}</p>
-              <p><strong>Location:</strong> {booking.location}</p>
-              <p><strong>Status:</strong> {booking.cancelled ? 'Cancelled' : 'Active'}</p>
-              {!booking.cancelled && (
-                <button onClick={() => handleCancelBooking(booking.id)} className="btn cancel">
-                  Cancel Booking
-                </button>
-              )}
-            </div>
-          ))
-        )}
+        {/* Change Password */}
+        <form onSubmit={handlePasswordChange} className="form-box">
+          <h3>Change Password</h3>
+          <input
+            type="password"
+            placeholder="New Password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+          />
+          <button type="submit" className="btn">Change Password</button>
+          {passwordMessage && <p className="status-msg">{passwordMessage}</p>}
+        </form>
       </div>
     </div>
-  </div>
   );
 };
 

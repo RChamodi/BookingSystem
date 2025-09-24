@@ -11,6 +11,10 @@ import Booking from './pages/Booking';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import Home from './pages/Home';
 import NavBar from './components/common/NavBar';
+import MyBookings from './pages/MyBookings';
+import BookingDetails from './pages/BookingDetails';
+import BookingSuccess from './pages/BookingSuccess';
+
 
 const PrivateRoute = ({ children, roles }) => {
   const { user, loading } = useContext(AuthContext);
@@ -45,17 +49,43 @@ const AppWrapper = () => {
           element={
             <PrivateRoute roles={['USER', 'ADMIN']}>
               <Profile />
+              
             </PrivateRoute>
           }
         />
         <Route
-          path="/booking"
+          path="/my-bookings"
           element={
             <PrivateRoute roles={['USER', 'ADMIN']}>
-              <Booking />
+              <MyBookings/>
+              
             </PrivateRoute>
           }
         />
+        <Route path="/booking/:id"
+         element={
+          <PrivateRoute roles={['USER', 'ADMIN']}>
+         <BookingDetails />
+         </PrivateRoute>
+         } 
+         />
+        <Route
+          path="/booking"
+          element={
+            
+              <Booking />
+            
+          }
+        />
+        <Route
+  path="/booking-success"
+  element={
+    <PrivateRoute roles={['USER', 'ADMIN']}>
+      <BookingSuccess />
+    </PrivateRoute>
+  }
+/>
+
         <Route
           path="/admin"
           element={

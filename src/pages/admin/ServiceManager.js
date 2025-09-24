@@ -102,11 +102,7 @@ const ServiceManager = () => {
       <form onSubmit={handleAddOrUpdate} className="service-form">
         <input name="name" placeholder="Service Name" value={formData.name} onChange={handleChange} required />
         <input name="location" placeholder="Location" value={formData.location} onChange={handleChange} required />
-        <select name="type" value={formData.type} onChange={handleChange} required>
-          <option value="">Select Type</option>
-          <option value="Online">Online</option>
-          <option value="Offline">Offline</option>
-        </select>
+        <input name="type" placeholder="Type or Category" value={formData.type} onChange={handleChange} required />
         <input name="price" placeholder="Price" type="number" value={formData.price} onChange={handleChange} required />
         <textarea name="description" placeholder="Description" value={formData.description} onChange={handleChange} required rows={3} />
         <button type="submit" className="btn btn-primary">
@@ -122,7 +118,7 @@ const ServiceManager = () => {
           services.map((s) => (
             <div key={s.id} className="service-card">
               <div className="service-info">
-                <strong>{s.name}</strong> - {s.type} - ₹{s.price}
+                <strong>{s.name}</strong> - {s.type} - Rs {s.price}
                 <br />
                 <em>{s.location}</em>
                 <br />
