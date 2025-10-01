@@ -1,4 +1,3 @@
-
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +15,7 @@ const UserDropdown = () => {
 
   const handleLogout = () => {
     logout(); // Call logout from AuthContext
-    navigate('/login'); // Or your login route
+    navigate('/login');
   };
 
   const handleClickOutside = (e) => {

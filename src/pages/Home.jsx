@@ -29,7 +29,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      {/* Hero Section */}
+      
       <div className="hero-section">
         <div className="hero-text">
           <h1>Welcome to BookingPro</h1>
