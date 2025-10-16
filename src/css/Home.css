@@ -263,3 +263,77 @@
   gap: 1.5rem;
   justify-content: center;
 }
+
+.hero-banner {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  height: 600px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  background-image: url('/public/images/Booking_Home.jpg') ;
+  color: white;
+}
+
+.hero-banner .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(105, 103, 103, 0.6); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-banner .hero-text {
+  position: relative;
+  text-align: center;
+  z-index: 2;
+  max-width: 700px;
+  padding: 0 20px;
+  color: white;
+}
+
+.hero-banner .hero-text h1 {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.hero-banner .hero-text p {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+.hero-banner .button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.hero-banner .btn {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.hero-banner .btn.primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.hero-banner .btn.secondary {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+}

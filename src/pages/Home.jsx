@@ -30,34 +30,34 @@ const Home = () => {
   return (
     <div className="home-container">
       
-      <div className="hero-section">
-        <div className="hero-text">
-          <h1>Welcome to BookingPro</h1>
-          <p>Book appointments easily and quickly.</p>
-          <div className="button-group">
-            {user ? (
+      <div className="hero-banner" >
+  <div className="overlay">
+    <div className="hero-text">
+      <h1>Welcome to BookingPro</h1>
+      <p>Book appointments easily and quickly.</p>
+      <div className="button-group">
+        {user ? (
+          <>
+            <h2>Hello, {user.name}</h2>
+            {user.role === 'ADMIN' && <Link to="/admin" className="btn primary">Admin Dashboard</Link>}
+            {user.role === 'USER' && (
               <>
-                <h2>Hello, {user.name}</h2>
-                {user.role === 'ADMIN' && <Link to="/admin" className="btn primary">Admin Dashboard</Link>}
-                {user.role === 'USER' && (
-                  <>
-                    <Link to="/booking" className="btn primary">Book a Service</Link>
-                    <Link to="/profile" className="btn secondary">My Profile</Link>
-                  </>
-                )}
-              </>
-            ) : (
-              <>
-                <Link to="/login" className="btn primary">Login</Link>
-                <Link to="/register" className="btn secondary">Register</Link>
+                <Link to="/booking" className="btn primary">Book a Service</Link>
+                <Link to="/profile" className="btn secondary">My Profile</Link>
               </>
             )}
-          </div>
-        </div>
-        <div className="hero-image">
-          <img src="/images/Booking_Home.jpg" alt="Booking" />
-        </div>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="btn primary">Login</Link>
+            <Link to="/register" className="btn secondary">Register</Link>
+          </>
+        )}
       </div>
+    </div>
+  </div>
+</div>
+
 
       {/* Tabs Section */}
       <div className="tabs-container">
