@@ -3,6 +3,7 @@ import ServiceManager from './ServiceManager';
 import BookingManager from './BookingManager';
 import UserManager from './UserManager';
 import AvailabilityManager from './AvailabilityManager';
+import PaymentManager from './PaymentManager';
 import DashboardOverview from './DashboardOverview';
 import "../../css/AdminDashboard.css";
 
@@ -21,6 +22,8 @@ const AdminDashboard = () => {
         return <BookingManager/>;
       case 'users':
         return <UserManager/>;
+      case 'payments':
+        return <PaymentManager/>;
       default:
         return null;
     }
@@ -31,7 +34,7 @@ const AdminDashboard = () => {
       <aside className="admin-sidebar">
         <h3 className="sidebar-title">Admin Panel</h3>
         <nav className="sidebar-nav">
-          {['dashboard', 'services', 'availability', 'bookings', 'users'].map(tab => (
+          {['dashboard', 'services', 'availability', 'bookings', 'users','payments'].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}

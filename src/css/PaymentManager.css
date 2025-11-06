@@ -1,0 +1,122 @@
+.payment-title {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f0d78; 
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+.btn.primary {
+    background-color: #0077cc;
+    color: #fff;
+}
+
+.payment-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.btn.primary {
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+}
+
+.btn.primary:hover {
+  background-color: #0056b3;
+}
+
+/* ===== TABLE STYLES ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(12, 12, 12, 0.08);
+}
+
+thead {
+ 
+  color: black;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+th,
+td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/* Amount & status emphasis */
+td:nth-child(4) {
+  font-weight: 600;
+  color: #2e7d32; /* green for amount */
+}
+
+td:nth-child(5) {
+  font-weight: 500;
+  color: #555;
+}
+
+td:nth-child(5):contains("SUCCEEDED") {
+  color: #28a745;
+}
+
+td:nth-child(5):contains("PENDING") {
+  color: #f0ad4e;
+}
+
+td:nth-child(5):contains("FAILED") {
+  color: #dc3545;
+}
+
+/* Responsive table for smaller screens */
+@media (max-width: 768px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+  }
+
+  td {
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #555;
+  }
+}

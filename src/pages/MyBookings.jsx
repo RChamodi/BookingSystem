@@ -60,6 +60,25 @@ const MyBookings = () => {
       toast.error('Error cancelling booking');
     }
   };
+  const handlePayNow = async (bookingId) => {
+  try {
+    const res = await fetch('http://localhost:8080/api/payments/create-checkout-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ bookingId })
+    });
+
+    if (res.ok) {
+      const { url } = await res.json();
+      window.location.href = url; // redirect to Stripe Checkout
+    } else {
+      alert('Failed to initiate payment');
+    }
+  } catch (err) {
+    console.error('Payment initiation error', err);
+  }
+};
 
   return (
     <div className="profile-container">
@@ -84,14 +103,12 @@ const MyBookings = () => {
                 <p><strong>Time:</strong> {new Date(booking.dateTime).toLocaleTimeString()}</p>
                 <p><strong>Location:</strong> {booking.location}</p>
                 <p><strong>Status:</strong> {booking.cancelled ? 'Cancelled' : 'Active'}</p>
-                {!booking.cancelled && (
-                  <button
-                    onClick={() => handleCancelBooking(booking.id)}
-                    className="btn cancel"
-                  >
-                    Cancel Booking
-                  </button>
-                )}
+                {!booking.cancelled && !booking.paid && (
+      <div>
+        <button className="btn cancel" onClick={() => handleCancelBooking(booking.id)}>Cancel Booking</button>
+        <button className="btn" onClick={() => handlePayNow(booking.id)}>Pay Now</button>
+      </div>
+    )}
               </div>
               </div>
             ))
